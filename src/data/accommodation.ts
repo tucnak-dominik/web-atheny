@@ -9,5 +9,4 @@ export const accommodation = {
   lat: 37.9757,
   lng: 23.7358,
   notes: 'Check-in od 15:00, pozdní check-out lze domluvit',
-  isPlaceholder: true,
 } satisfies Accommodation;

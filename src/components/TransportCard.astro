@@ -160,22 +160,31 @@ const directionLabel =
     width: 20px;
     height: 20px;
     color: var(--color-terracotta);
-    opacity: 0.7;
     flex-shrink: 0;
-    animation: transport-slide 3s ease-in-out infinite;
+    animation: fly-outbound 4s ease-in-out infinite;
   }
 
   .transport-card--return .transport-icon {
     scale: -1 1;
+    animation: fly-return 4s ease-in-out infinite;
   }
 
-  @keyframes transport-slide {
-    0%, 100% { translate: 0 0; }
-    50% { translate: 4px 0; }
+  @keyframes fly-outbound {
+    0%   { translate: -110px 0; opacity: 0; }
+    12%  { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { translate: 110px 0; opacity: 0; }
+  }
+
+  @keyframes fly-return {
+    0%   { translate: 110px 0; opacity: 0; }
+    12%  { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { translate: -110px 0; opacity: 0; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .transport-icon { animation: none; }
+    .transport-icon { animation: none; opacity: 0.7; }
   }
 
   .transport-line {
