@@ -1,13 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
-import FlightCard from '../components/FlightCard.astro';
+import TransportCard from '../components/TransportCard.astro';
 import AccommodationCard from '../components/AccommodationCard.astro';
 import ItineraryIsland from '../components/ItineraryIsland';
 import MapIsland from '../components/MapIsland';
 import PackingIsland from '../components/PackingIsland';
 
-import { flights } from '../data/flights';
+import { transport } from '../data/transport';
 import { accommodation } from '../data/accommodation';
 import { itinerary } from '../data/itinerary';
 import { packingItems } from '../data/packing';
@@ -18,14 +18,14 @@ import { pois } from '../data/generated/pois';
   <!-- Hero + Countdown -->
   <Hero />
 
-  <!-- Flights -->
-  <section id="flights" class="section">
+  <!-- Transport -->
+  <section id="transport" class="section">
     <div class="container">
       <p class="section-label reveal">Doprava</p>
-      <h2 class="section-title reveal">Lety</h2>
-      <div class="flights-grid reveal">
-        {flights.map((flight) => (
-          <FlightCard flight={flight} />
+      <h2 class="section-title reveal">Doprava</h2>
+      <div class="transport-grid reveal">
+        {transport.map((leg) => (
+          <TransportCard leg={leg} />
         ))}
       </div>
     </div>
@@ -75,10 +75,16 @@ import { pois } from '../data/generated/pois';
 </Layout>
 
 <style>
-  .flights-grid {
+  .transport-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
     gap: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .transport-grid {
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
   }
 
   .section--map {

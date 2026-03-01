@@ -2,6 +2,7 @@ import { useEffect, useState } from 'preact/hooks';
 
 interface Props {
   departureDate: string;
+  departureTime?: string;
 }
 
 interface TimeLeft {
@@ -12,8 +13,8 @@ interface TimeLeft {
   departed: boolean;
 }
 
-function calcTimeLeft(departureDateStr: string): TimeLeft {
-  const target = new Date(departureDateStr + 'T07:30:00').getTime();
+function calcTimeLeft(departureDateStr: string, departureTime = '00:00'): TimeLeft {
+  const target = new Date(departureDateStr + 'T' + departureTime + ':00').getTime();
   const now = Date.now();
   const diff = target - now;
 
@@ -33,18 +34,18 @@ function pad(n: number): string {
   return String(n).padStart(2, '0');
 }
 
-export default function CountdownIsland({ departureDate }: Props) {
-  const [time, setTime] = useState<TimeLeft>(() => calcTimeLeft(departureDate));
+export default function CountdownIsland({ departureDate, departureTime }: Props) {
+  const [time, setTime] = useState<TimeLeft>(() => calcTimeLeft(departureDate, departureTime));
 
   useEffect(() => {
-    const id = setInterval(() => setTime(calcTimeLeft(departureDate)), 1_000);
+    const id = setInterval(() => setTime(calcTimeLeft(departureDate, departureTime)), 1_000);
     return () => clearInterval(id);
-  }, [departureDate]);
+  }, [departureDate, departureTime]);
 
   if (time.departed) {
     return (
       <div class="countdown countdown--departed">
-        <p class="countdown-message">Vítej v Athénách! 🏛️</p>
+        <p class="countdown-message">Cesta začala!</p>
       </div>
     );
   }

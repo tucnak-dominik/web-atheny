@@ -1,11 +1,15 @@
-export interface Flight {
+export interface TransportLeg {
+  id: string;
   date: string;
-  time: string;
   from: string;
   to: string;
-  airline: string;
-  flight_number: string;
-  notes: string;
+  mode: 'flight' | 'train';
+  status: 'planned' | 'partial' | 'confirmed';
+  time_departure?: string;
+  time_arrival?: string;
+  carrier?: string;
+  reference?: string;
+  notes?: string;
 }
 
 export interface Accommodation {
@@ -17,6 +21,7 @@ export interface Accommodation {
   lat: number;
   lng: number;
   notes: string;
+  isPlaceholder?: boolean;
 }
 
 export interface ItineraryItem {
@@ -44,6 +49,7 @@ export interface PackingItem {
 export interface SiteConfig {
   trip_name: string;
   departure_date: string;
+  return_date: string;
   hero_image_url: string;
 }
 

@@ -4,7 +4,7 @@ export const packingItems = [
   // Doklady
   { item: 'Cestovní pas', category: 'Doklady', packed: false, notes: 'Platnost alespoň 6 měsíců' },
   { item: 'Průkaz pojišťovny (EHIC)', category: 'Doklady', packed: false, notes: '' },
-  { item: 'Letenky (vytištěné / v mobilu)', category: 'Doklady', packed: false, notes: '' },
+  { item: 'Letenky + jízdenky na vlak (vytištěné / v mobilu)', category: 'Doklady', packed: false, notes: '' },
   { item: 'Rezervace hotelu', category: 'Doklady', packed: false, notes: '' },
   { item: 'Vstupenky Akropolis', category: 'Doklady', packed: false, notes: 'odysseus.culture.gr' },
 

@@ -8,7 +8,7 @@ export const itinerary = [
     time_start: '15:00',
     time_end: '16:30',
     title: 'Příjezd a check-in',
-    description: 'Přistání na ATH, transfer taxíkem do hotelu, check-in.',
+    description: 'Přílét do Athén z Vídně, transfer taxíkem do hotelu, check-in.',
     category: 'logistika',
     travel_mode: 'taxi',
     lat: 37.9757,

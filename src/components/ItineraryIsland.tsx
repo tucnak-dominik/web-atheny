@@ -16,10 +16,10 @@ const TRAVEL_ICONS: Record<string, string> = {
 
 const CATEGORY_COLORS: Record<string, string> = {
   kultura:      'var(--color-aegean)',
-  jídlo:        'var(--color-terracotta)',
+  jídlo:        'var(--color-terracotta-text)',
   procházka:    'var(--color-olive)',
   logistika:    'var(--color-text-muted)',
-  'volný čas':  'var(--color-day3)',
+  'volný čas':  'var(--color-day3-text)',
 };
 
 function getCategoryColor(cat: string): string {

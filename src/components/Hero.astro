@@ -1,10 +1,13 @@
 ---
 import { siteConfig } from '../data/config';
+import { transport } from '../data/transport';
 import { formatDate } from '../lib/utils';
 import CountdownIsland from './CountdownIsland';
 
 const departureLabel = formatDate(siteConfig.departure_date);
 const returnLabel = formatDate('2026-05-15');
+const firstLeg = transport.find((l) => l.date === siteConfig.departure_date);
+const departureTime = firstLeg?.time_departure;
 ---
 
 <section id="hero" class="hero">
@@ -27,12 +30,13 @@ const returnLabel = formatDate('2026-05-15');
     </h1>
 
     <p class="hero-subtitle reveal">
-      Čtyři dny v kolébce demokracie — Akropolis, smažené kalamáry a skok přes moře.
+      <span data-placeholder>Čtyři dny v kolébce demokracie — Akropolis, smažené kalamáry a skok přes moře.</span>
     </p>
 
     <div class="reveal">
       <CountdownIsland
         departureDate={siteConfig.departure_date}
+        departureTime={departureTime}
         client:load
       />
     </div>
@@ -149,7 +153,7 @@ const returnLabel = formatDate('2026-05-15');
     color: var(--color-text-muted);
     max-width: 480px;
     margin-bottom: 3rem;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1.7;
   }
 

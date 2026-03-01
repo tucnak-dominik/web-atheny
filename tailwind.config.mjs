@@ -6,6 +6,7 @@ export default {
       colors: {
         bg: '#FAF6F1',
         text: '#2C2418',
+        'text-muted': '#5E5047',
         terracotta: '#C4956A',
         olive: '#556B2F',
         aegean: '#1E5B8A',

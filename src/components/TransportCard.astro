@@ -1,0 +1,209 @@
+---
+import type { TransportLeg } from '../lib/types';
+import { formatDate, formatTime } from '../lib/utils';
+
+interface Props {
+  leg: TransportLeg;
+}
+const { leg } = Astro.props;
+
+const isReturn = leg.id.includes('-ret');
+const directionLabel =
+  leg.mode === 'flight'
+    ? isReturn ? 'Zpáteční let' : 'Let tam'
+    : isReturn ? 'Vlak zpět' : 'Vlak tam';
+---
+
+<article class="card transport-card" data-status={leg.status}>
+  <header class="transport-header">
+    <span class="transport-label">{directionLabel}</span>
+    <span class="transport-date">{formatDate(leg.date)}</span>
+  </header>
+
+  <div class="transport-route">
+    <div class="transport-endpoint">
+      <span class="transport-time">
+        {leg.time_departure ? formatTime(leg.time_departure) : '—'}
+      </span>
+      <span class="transport-city">{leg.from}</span>
+    </div>
+
+    <div class="transport-arrow" aria-hidden="true">
+      {leg.mode === 'flight' ? (
+        <svg class="transport-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="currentColor"/>
+        </svg>
+      ) : (
+        <svg class="transport-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C8 2 4 2.5 4 6v9l2 2v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h6v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1l2-2V6c0-3.5-3.58-4-8-4zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM18 10H6V6h12v4z" fill="currentColor"/>
+        </svg>
+      )}
+      <svg class="transport-line" viewBox="0 0 80 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="6" x2="64" y2="6" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <path d="M60 2 L72 6 L60 10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      </svg>
+      {leg.carrier && <span class="transport-carrier">{leg.carrier}</span>}
+      {leg.reference && <span class="transport-ref">{leg.reference}</span>}
+    </div>
+
+    <div class="transport-endpoint transport-endpoint--right">
+      <span class="transport-time">
+        {leg.time_arrival ? formatTime(leg.time_arrival) : '—'}
+      </span>
+      <span class="transport-city">{leg.to}</span>
+    </div>
+  </div>
+
+  {!leg.time_departure && (
+    <p class="transport-tba">Čas bude upřesněn</p>
+  )}
+
+  {leg.notes && (
+    <footer class="transport-notes">
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 3a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm0 3.5c.55 0 1 .45 1 1V11a1 1 0 1 1-2 0V8.5c0-.55.45-1 1-1z"/>
+      </svg>
+      {leg.notes}
+    </footer>
+  )}
+</article>
+
+<style>
+  .transport-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .transport-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .transport-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-terracotta-text);
+  }
+
+  .transport-date {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .transport-route {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 768px) {
+    .transport-route {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+  }
+
+  .transport-endpoint {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .transport-endpoint--right {
+    text-align: left;
+  }
+
+  @media (min-width: 768px) {
+    .transport-endpoint--right {
+      text-align: right;
+      align-items: flex-end;
+    }
+  }
+
+  .transport-time {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--color-text);
+  }
+
+  .transport-city {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+
+  .transport-arrow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-border);
+    padding: 0.25rem 0;
+  }
+
+  @media (min-width: 768px) {
+    .transport-arrow {
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+  }
+
+  .transport-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-terracotta);
+    opacity: 0.7;
+    flex-shrink: 0;
+  }
+
+  .transport-line {
+    width: 60px;
+    height: 12px;
+    color: var(--color-terracotta);
+    opacity: 0.4;
+  }
+
+  .transport-carrier {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .transport-ref {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+  }
+
+  .transport-tba {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .transport-notes {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    background: rgba(196, 149, 106, 0.07);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.75rem;
+    border-left: 2px solid var(--color-terracotta);
+  }
+
+  .transport-notes svg {
+    color: var(--color-terracotta);
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+</style>
