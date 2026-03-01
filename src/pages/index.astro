@@ -8,6 +8,8 @@ import MapIsland from '../components/MapIsland';
 import PackingIsland from '../components/PackingIsland';
 
 import { transport } from '../data/transport';
+const outbound = transport.filter((l) => l.direction === 'outbound');
+const returnLegs = transport.filter((l) => l.direction === 'return');
 import { accommodation } from '../data/accommodation';
 import { itinerary } from '../data/itinerary';
 import { packingItems } from '../data/packing';
@@ -23,10 +25,23 @@ import { pois } from '../data/generated/pois';
     <div class="container">
       <p class="section-label reveal">Doprava</p>
       <h2 class="section-title reveal">Doprava</h2>
-      <div class="transport-grid reveal">
-        {transport.map((leg) => (
-          <TransportCard leg={leg} />
-        ))}
+      <div class="transport-groups reveal">
+        <div class="transport-group">
+          <h3 class="transport-group-title">✈ Cesta tam</h3>
+          <div class="transport-group-legs">
+            {outbound.map((leg) => (
+              <TransportCard leg={leg} />
+            ))}
+          </div>
+        </div>
+        <div class="transport-group">
+          <h3 class="transport-group-title">✈ Cesta zpět</h3>
+          <div class="transport-group-legs">
+            {returnLegs.map((leg) => (
+              <TransportCard leg={leg} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -69,22 +84,52 @@ import { pois } from '../data/generated/pois';
     <div class="container">
       <p class="section-label reveal">Co si vzít</p>
       <h2 class="section-title reveal">Packing list</h2>
-      <PackingIsland items={[...packingItems]} client:visible />
+      <PackingIsland items={[...packingItems]} client:only="preact" />
     </div>
   </section>
 </Layout>
 
 <style>
-  .transport-grid {
+  .transport-groups {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
 
   @media (min-width: 768px) {
-    .transport-grid {
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    .transport-groups {
+      grid-template-columns: 1fr 1fr;
     }
+  }
+
+  .transport-group {
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .transport-group-title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-terracotta-text);
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .transport-group-legs {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .transport-group-legs :global(.transport-card + .transport-card) {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.25rem;
+    margin-top: 1.25rem;
   }
 
   .section--map {

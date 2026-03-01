@@ -7,6 +7,7 @@ export const transport: TransportLeg[] = [
     from: 'Brno',
     to: 'Vídeň (Wien Hbf)',
     mode: 'train',
+    direction: 'outbound',
     status: 'planned',
   },
   {
@@ -15,9 +16,12 @@ export const transport: TransportLeg[] = [
     from: 'Vídeň (VIE)',
     to: 'Atény (ATH)',
     mode: 'flight',
-    status: 'partial',
+    direction: 'outbound',
+    status: 'confirmed',
     time_departure: '13:35',
     time_arrival: '16:45',
+    carrier: 'Ryanair',
+    reference: 'FR 699',
   },
   {
     id: 'flight-ret',
@@ -25,9 +29,12 @@ export const transport: TransportLeg[] = [
     from: 'Atény (ATH)',
     to: 'Vídeň (VIE)',
     mode: 'flight',
-    status: 'partial',
+    direction: 'return',
+    status: 'confirmed',
     time_departure: '16:15',
     time_arrival: '17:35',
+    carrier: 'Ryanair',
+    reference: 'FR 44',
   },
   {
     id: 'train-ret',
@@ -35,6 +42,7 @@ export const transport: TransportLeg[] = [
     from: 'Vídeň (Wien Hbf)',
     to: 'Brno',
     mode: 'train',
+    direction: 'return',
     status: 'planned',
   },
 ];

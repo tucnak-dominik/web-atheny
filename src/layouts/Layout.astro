@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { siteConfig } from '../data/config';
+import NavIcon from '../components/NavIcon.astro';
 
 interface Props {
   title?: string;
@@ -15,11 +16,11 @@ const retDate = new Date(siteConfig.return_date);
 const footerDates = `${depDate.getDate()}.–${retDate.getDate()}. ${retDate.getMonth() + 1}. ${retDate.getFullYear()}`;
 
 const navLinks = [
-  { href: `${base}#transport`,     label: 'Doprava' },
-  { href: `${base}#accommodation`, label: 'Hotel' },
-  { href: `${base}#itinerary`,     label: 'Plán' },
-  { href: `${base}#map`,           label: 'Mapa' },
-  { href: `${base}#packing`,       label: 'Balení' },
+  { href: `${base}#transport`,     label: 'Doprava', icon: 'transport' as const },
+  { href: `${base}#accommodation`, label: 'Hotel',   icon: 'hotel'     as const },
+  { href: `${base}#itinerary`,     label: 'Plán',    icon: 'plan'      as const },
+  { href: `${base}#map`,           label: 'Mapa',    icon: 'map'       as const },
+  { href: `${base}#packing`,       label: 'Balení',  icon: 'packing'   as const },
 ];
 ---
 
@@ -42,9 +43,12 @@ const navLinks = [
           <span class="nav-brand-text">{siteConfig.trip_name}</span>
         </a>
         <ul class="nav-links" role="list">
-          {navLinks.map(({ href, label }) => (
+          {navLinks.map(({ href, label, icon }) => (
             <li>
-              <a href={href} class="nav-link">{label}</a>
+              <a href={href} class="nav-link">
+                <NavIcon name={icon} />
+                <span class="nav-link-text">{label}</span>
+              </a>
             </li>
           ))}
         </ul>
@@ -134,6 +138,7 @@ const navLinks = [
     min-height: 44px;
     display: flex;
     align-items: center;
+    gap: 0.4rem;
     border-radius: var(--radius-sm);
     transition: color 0.2s, background 0.2s;
   }
@@ -141,6 +146,13 @@ const navLinks = [
     color: var(--color-text);
     background: rgba(196, 149, 106, 0.1);
     opacity: 1;
+  }
+
+  :global(.nav-icon) {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: currentColor;
   }
 
   footer {
@@ -162,6 +174,15 @@ const navLinks = [
 
   @media (max-width: 600px) {
     .nav-brand-text { display: none; }
-    .nav-link { padding: 0.35rem 0.5rem; font-size: 0.8rem; }
+    .nav-link {
+      padding: 0.5rem;
+      min-width: 44px;
+      justify-content: center;
+    }
+    .nav-link-text { display: none; }
+    :global(.nav-icon) {
+      width: 22px;
+      height: 22px;
+    }
   }
 </style>

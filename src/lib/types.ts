@@ -4,6 +4,7 @@ export interface TransportLeg {
   from: string;
   to: string;
   mode: 'flight' | 'train';
+  direction: 'outbound' | 'return';
   status: 'planned' | 'partial' | 'confirmed';
   time_departure?: string;
   time_arrival?: string;
