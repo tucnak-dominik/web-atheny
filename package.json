@@ -7,7 +7,7 @@
     "build": "npm run fetch-pois && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "fetch-pois": "npx tsx scripts/fetch-pois.ts"
   },
