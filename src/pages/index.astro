@@ -1,1 +1,90 @@
-<h1>Athény 2026</h1>
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import FlightCard from '../components/FlightCard.astro';
+import AccommodationCard from '../components/AccommodationCard.astro';
+import ItineraryIsland from '../components/ItineraryIsland';
+import MapIsland from '../components/MapIsland';
+import PackingIsland from '../components/PackingIsland';
+
+import { flights } from '../data/flights';
+import { accommodation } from '../data/accommodation';
+import { itinerary } from '../data/itinerary';
+import { packingItems } from '../data/packing';
+import { pois } from '../data/generated/pois';
+---
+
+<Layout>
+  <!-- Hero + Countdown -->
+  <Hero />
+
+  <!-- Flights -->
+  <section id="flights" class="section">
+    <div class="container">
+      <p class="section-label reveal">Doprava</p>
+      <h2 class="section-title reveal">Lety</h2>
+      <div class="flights-grid reveal">
+        {flights.map((flight) => (
+          <FlightCard flight={flight} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Accommodation -->
+  <section id="accommodation" class="section">
+    <div class="container">
+      <p class="section-label reveal">Ubytování</p>
+      <h2 class="section-title reveal">Hotel</h2>
+      <div class="reveal">
+        <AccommodationCard accommodation={accommodation} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Itinerary -->
+  <section id="itinerary" class="section">
+    <div class="container">
+      <p class="section-label reveal">Den po dni</p>
+      <h2 class="section-title reveal">Itinerář</h2>
+      <ItineraryIsland items={[...itinerary]} client:visible />
+    </div>
+  </section>
+
+  <!-- Map -->
+  <section id="map" class="section section--map">
+    <div class="container">
+      <p class="section-label reveal">Interaktivní přehled</p>
+      <h2 class="section-title reveal">Mapa</h2>
+    </div>
+    <MapIsland
+      items={[...itinerary]}
+      pois={[...pois]}
+      client:visible
+    />
+  </section>
+
+  <!-- Packing -->
+  <section id="packing" class="section">
+    <div class="container">
+      <p class="section-label reveal">Co si vzít</p>
+      <h2 class="section-title reveal">Packing list</h2>
+      <PackingIsland items={[...packingItems]} client:visible />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .flights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .section--map {
+    padding-bottom: 0;
+  }
+  .section--map .container {
+    padding-bottom: 1.5rem;
+  }
+</style>

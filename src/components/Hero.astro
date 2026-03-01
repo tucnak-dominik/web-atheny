@@ -1,0 +1,166 @@
+---
+import { siteConfig } from '../data/config';
+import { formatDate } from '../lib/utils';
+import CountdownIsland from './CountdownIsland';
+
+const departureLabel = formatDate(siteConfig.departure_date);
+const returnLabel = formatDate('2026-05-15');
+---
+
+<section id="hero" class="hero">
+  <!-- Background decoration -->
+  <div class="hero-bg" aria-hidden="true">
+    <div class="hero-bg-circle hero-bg-circle--1"></div>
+    <div class="hero-bg-circle hero-bg-circle--2"></div>
+    <div class="hero-bg-grid"></div>
+  </div>
+
+  <div class="container hero-inner">
+    <div class="hero-eyebrow reveal">
+      <span class="hero-tag">Cestovní deník</span>
+      <span class="hero-dates">{departureLabel} — {returnLabel}</span>
+    </div>
+
+    <h1 class="hero-title reveal">
+      <em class="hero-title-accent">Athény</em>
+      <span class="hero-title-year">2026</span>
+    </h1>
+
+    <p class="hero-subtitle reveal">
+      Čtyři dny v kolébce demokracie — Akropolis, smažené kalamáry a skok přes moře.
+    </p>
+
+    <div class="reveal">
+      <CountdownIsland
+        departureDate={siteConfig.departure_date}
+        client:load
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: calc(100svh - var(--nav-h));
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  /* Background decorations */
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .hero-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.12;
+  }
+  .hero-bg-circle--1 {
+    width: 600px;
+    height: 600px;
+    right: -150px;
+    top: -100px;
+    background: radial-gradient(circle, var(--color-terracotta) 0%, transparent 70%);
+  }
+  .hero-bg-circle--2 {
+    width: 400px;
+    height: 400px;
+    left: -100px;
+    bottom: -80px;
+    background: radial-gradient(circle, var(--color-aegean) 0%, transparent 70%);
+    opacity: 0.08;
+  }
+
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(196, 149, 106, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(196, 149, 106, 0.06) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Content */
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .hero-tag {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: white;
+    background: var(--color-terracotta);
+    padding: 0.3em 0.8em;
+    border-radius: 99px;
+  }
+
+  .hero-dates {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    letter-spacing: 0.03em;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.95;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-title-accent {
+    font-style: italic;
+    color: var(--color-terracotta);
+  }
+
+  .hero-title-year {
+    font-style: normal;
+    color: var(--color-text);
+    font-size: 0.55em;
+    letter-spacing: 0.08em;
+    font-weight: 400;
+    opacity: 0.5;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.15rem);
+    color: var(--color-text-muted);
+    max-width: 480px;
+    margin-bottom: 3rem;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* Staggered reveal delays */
+  .reveal:nth-child(1) { transition-delay: 0.1s; }
+  .reveal:nth-child(2) { transition-delay: 0.2s; }
+  .reveal:nth-child(3) { transition-delay: 0.3s; }
+  .reveal:nth-child(4) { transition-delay: 0.4s; }
+
+  @media (max-width: 600px) {
+    .hero { min-height: auto; padding: 3rem 0; }
+    .hero-title { font-size: clamp(3rem, 16vw, 5rem); }
+  }
+</style>

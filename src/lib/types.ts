@@ -45,7 +45,15 @@ export interface SiteConfig {
   trip_name: string;
   departure_date: string;
   hero_image_url: string;
-  sheet_base_url: string;
+}
+
+export interface POI {
+  id: string;
+  name: string;
+  category: string;
+  lat: number;
+  lng: number;
+  description?: string;
 }
 
 export interface Waypoint {

@@ -1,0 +1,233 @@
+---
+import type { Accommodation } from '../lib/types';
+import { formatDate } from '../lib/utils';
+
+interface Props {
+  accommodation: Accommodation;
+}
+const { accommodation: acc } = Astro.props;
+
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${acc.lat},${acc.lng}`;
+const nightCount = Math.round(
+  (new Date(acc.check_out).getTime() - new Date(acc.check_in).getTime()) / 86_400_000
+);
+---
+
+<article class="card acc-card">
+  <div class="acc-main">
+    <div class="acc-info">
+      <header class="acc-header">
+        <span class="acc-label">Ubytování</span>
+        <span class="acc-nights">{nightCount} noci</span>
+      </header>
+      <h3 class="acc-name">{acc.name}</h3>
+      <p class="acc-address">
+        <svg width="12" height="14" viewBox="0 0 12 16" fill="currentColor" aria-hidden="true">
+          <path d="M6 0C2.69 0 0 2.69 0 6c0 4.5 6 10 6 10s6-5.5 6-10c0-3.31-2.69-6-6-6zm0 8.5C4.62 8.5 3.5 7.38 3.5 6S4.62 3.5 6 3.5 8.5 4.62 8.5 6 7.38 8.5 6 8.5z"/>
+        </svg>
+        {acc.address}
+      </p>
+
+      <div class="acc-dates">
+        <div class="acc-date-item">
+          <span class="acc-date-label">Check-in</span>
+          <span class="acc-date-value">{formatDate(acc.check_in)}</span>
+        </div>
+        <div class="acc-date-divider" aria-hidden="true"></div>
+        <div class="acc-date-item">
+          <span class="acc-date-label">Check-out</span>
+          <span class="acc-date-value">{formatDate(acc.check_out)}</span>
+        </div>
+      </div>
+
+      {acc.notes && (
+        <p class="acc-notes">{acc.notes}</p>
+      )}
+
+      <div class="acc-actions">
+        <a href={mapsUrl} target="_blank" rel="noopener noreferrer" class="acc-btn acc-btn--primary">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+            <path d="M8 0C5.24 0 3 2.24 3 5c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.75C7.03 6.75 6.25 5.97 6.25 5S7.03 3.25 8 3.25 9.75 4.03 9.75 5 8.97 6.75 8 6.75z"/>
+          </svg>
+          Zobrazit na mapě
+        </a>
+        {acc.booking_url && (
+          <a href={acc.booking_url} target="_blank" rel="noopener noreferrer" class="acc-btn acc-btn--secondary">
+            Rezervace
+          </a>
+        )}
+      </div>
+    </div>
+
+    <!-- Decorative map placeholder -->
+    <div class="acc-map-thumb" aria-hidden="true">
+      <div class="acc-map-pin">
+        <svg width="24" height="28" viewBox="0 0 24 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 0C7.58 0 4 3.58 4 8c0 5.5 8 20 8 20s8-14.5 8-20c0-4.42-3.58-8-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" fill="var(--color-terracotta)"/>
+        </svg>
+      </div>
+      <div class="acc-map-coords">
+        {acc.lat.toFixed(4)}° N, {acc.lng.toFixed(4)}° E
+      </div>
+    </div>
+  </div>
+</article>
+
+<style>
+  .acc-card { container-type: inline-size; }
+
+  .acc-main {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .acc-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .acc-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .acc-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-terracotta);
+  }
+
+  .acc-nights {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    background: rgba(196, 149, 106, 0.1);
+    padding: 0.15em 0.6em;
+    border-radius: 99px;
+  }
+
+  .acc-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--color-text);
+  }
+
+  .acc-address {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+  .acc-address svg { flex-shrink: 0; margin-top: 2px; color: var(--color-olive); }
+
+  .acc-dates {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    background: rgba(196, 149, 106, 0.05);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+  }
+
+  .acc-date-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .acc-date-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .acc-date-value {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .acc-date-divider {
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+    max-width: 40px;
+  }
+
+  .acc-notes {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  .acc-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 0.25rem;
+  }
+
+  .acc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.5em 1em;
+    border-radius: var(--radius-sm);
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .acc-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  .acc-btn--primary {
+    background: var(--color-terracotta);
+    color: white;
+  }
+
+  .acc-btn--secondary {
+    background: transparent;
+    color: var(--color-aegean);
+    border: 1px solid currentColor;
+  }
+
+  /* Decorative map thumbnail */
+  .acc-map-thumb {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #e8f0e8 0%, #d4e0d4 50%, #c8d8e0 100%);
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  .acc-map-coords {
+    font-size: 0.55rem;
+    color: var(--color-text-muted);
+    text-align: center;
+    line-height: 1.4;
+    padding: 0 0.5rem;
+  }
+
+  @container (max-width: 400px) {
+    .acc-main { grid-template-columns: 1fr; }
+    .acc-map-thumb { display: none; }
+  }
+</style>

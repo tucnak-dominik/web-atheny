@@ -4,13 +4,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        day1: '#3B82F6',
-        day2: '#10B981',
-        day3: '#F59E0B',
-        day4: '#8B5CF6',
+        bg: '#FAF6F1',
+        text: '#2C2418',
+        terracotta: '#C4956A',
+        olive: '#556B2F',
+        aegean: '#1E5B8A',
+        day1: '#C4956A',
+        day2: '#556B2F',
+        day3: '#B8860B',
+        day4: '#8B6F5E',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
       },
     },
   },
