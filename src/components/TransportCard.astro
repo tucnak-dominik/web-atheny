@@ -12,9 +12,17 @@ const directionLabel =
   leg.mode === 'flight'
     ? isReturn ? 'Zpáteční let' : 'Let tam'
     : isReturn ? 'Vlak zpět' : 'Vlak tam';
+
+// SVG animateMotion: outbound = 0→1 (left to right), return = 1→0 (right to left)
+const keyPoints = isReturn ? '1;0' : '0;1';
+// Plane pre-rotation: nose points up in the icon → rotate 90° CW to face right (outbound)
+// For return: rotate -90° so it faces left
+const planeTransform = isReturn
+  ? 'rotate(-90) scale(0.42) translate(-12 -12)'
+  : 'rotate(90) scale(0.42) translate(-12 -12)';
 ---
 
-<article class={`transport-card${isReturn ? ' transport-card--return' : ''}`} data-status={leg.status}>
+<article class="transport-card" data-status={leg.status}>
   <header class="transport-header">
     <span class="transport-label">{directionLabel}</span>
     <span class="transport-date">{formatDate(leg.date)}</span>
@@ -29,19 +37,75 @@ const directionLabel =
     </div>
 
     <div class="transport-arrow" aria-hidden="true">
-      {leg.mode === 'flight' ? (
-        <svg class="transport-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="currentColor"/>
-        </svg>
-      ) : (
-        <svg class="transport-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C8 2 4 2.5 4 6v9l2 2v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h6v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1l2-2V6c0-3.5-3.58-4-8-4zM7.5 17c-.83 0-1.5-.67-1.5-1.5S6.67 14 7.5 14s1.5.67 1.5 1.5S8.33 17 7.5 17zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM18 10H6V6h12v4z" fill="currentColor"/>
-        </svg>
-      )}
-      <svg class="transport-line" viewBox="0 0 80 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="0" y1="6" x2="64" y2="6" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <path d="M60 2 L72 6 L60 10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+      <!-- Single SVG: dashed line + animated icon via animateMotion -->
+      <svg class="transport-route-svg" viewBox="0 0 80 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Dashed connection line -->
+        <line x1="4" y1="12" x2="65" y2="12"
+              stroke="currentColor" stroke-width="1.5"
+              stroke-dasharray="4 3" opacity="0.45"/>
+        <!-- Arrowhead at destination end -->
+        <path d="M62 9 L70 12 L62 15"
+              stroke="currentColor" stroke-width="1.5"
+              fill="none" opacity="0.55"/>
+
+        {leg.mode === 'flight' ? (
+          <!-- Plane: Material icon pre-rotated to face direction of travel -->
+          <g transform={planeTransform}>
+            <path
+              d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"
+              fill="currentColor"
+            />
+            <animateMotion
+              dur="3.5s"
+              repeatCount="indefinite"
+              calcMode="linear"
+              keyPoints={keyPoints}
+              keyTimes="0;1"
+              path="M4 12 L65 12"
+            />
+            <animate
+              attributeName="opacity"
+              values="0;1;1;0"
+              keyTimes="0;0.12;0.88;1"
+              dur="3.5s"
+              repeatCount="indefinite"
+            />
+          </g>
+        ) : (
+          <!-- Train: side-view silhouette, mirrored for return direction -->
+          <g>
+            <g
+              fill="currentColor"
+              transform={isReturn ? 'scale(-1,1)' : undefined}
+            >
+              <!-- Body -->
+              <rect x="-7" y="-4.5" width="14" height="7" rx="1.5"/>
+              <!-- Cab at front (right = direction of travel) -->
+              <rect x="3.5" y="-4.5" width="4" height="5.5" rx="1" opacity="0.75"/>
+              <!-- Left wheel -->
+              <circle cx="-4" cy="3.5" r="1.8"/>
+              <!-- Right wheel -->
+              <circle cx="3" cy="3.5" r="1.8"/>
+            </g>
+            <animateMotion
+              dur="3.5s"
+              repeatCount="indefinite"
+              calcMode="linear"
+              keyPoints={keyPoints}
+              keyTimes="0;1"
+              path="M4 12 L65 12"
+            />
+            <animate
+              attributeName="opacity"
+              values="0;1;1;0"
+              keyTimes="0;0.12;0.88;1"
+              dur="3.5s"
+              repeatCount="indefinite"
+            />
+          </g>
+        )}
       </svg>
+
       {leg.carrier && <span class="transport-carrier">{leg.carrier}</span>}
       {leg.reference && <span class="transport-ref">{leg.reference}</span>}
     </div>
@@ -156,42 +220,12 @@ const directionLabel =
     }
   }
 
-  .transport-icon {
-    width: 20px;
-    height: 20px;
+  .transport-route-svg {
+    width: 80px;
+    height: 24px;
     color: var(--color-terracotta);
+    overflow: visible;
     flex-shrink: 0;
-    animation: fly-outbound 4s ease-in-out infinite;
-  }
-
-  .transport-card--return .transport-icon {
-    scale: -1 1;
-    animation: fly-return 4s ease-in-out infinite;
-  }
-
-  @keyframes fly-outbound {
-    0%   { translate: -110px 0; opacity: 0; }
-    12%  { opacity: 1; }
-    88%  { opacity: 1; }
-    100% { translate: 110px 0; opacity: 0; }
-  }
-
-  @keyframes fly-return {
-    0%   { translate: 110px 0; opacity: 0; }
-    12%  { opacity: 1; }
-    88%  { opacity: 1; }
-    100% { translate: -110px 0; opacity: 0; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .transport-icon { animation: none; opacity: 0.7; }
-  }
-
-  .transport-line {
-    width: 60px;
-    height: 12px;
-    color: var(--color-terracotta);
-    opacity: 0.4;
   }
 
   .transport-carrier {

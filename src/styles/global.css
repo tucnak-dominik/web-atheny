@@ -642,41 +642,7 @@ a:hover { opacity: 0.75; }
   .map-wrap { height: 380px; }
 }
 
-/* ── Placeholder / status badges ──────────────────────────────── */
-[data-status="planned"],
-[data-status="partial"] {
-  position: relative;
-}
-
-[data-status="planned"]::before,
-[data-status="partial"]::before {
-  position: absolute;
-  top: 0.6rem;
-  right: 0.75rem;
-  font-family: var(--font-sans);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 0.2em 0.6em;
-  border-radius: 99px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-[data-status="planned"]::before {
-  content: 'Čeká na potvrzení';
-  background: rgba(184, 134, 11, 0.12);
-  color: color-mix(in oklab, #B8860B 72%, black);
-  border: 1px solid rgba(184, 134, 11, 0.3);
-}
-
-[data-status="partial"]::before {
-  content: 'Neúplné údaje';
-  background: rgba(30, 91, 138, 0.1);
-  color: color-mix(in oklab, #1E5B8A 70%, black);
-  border: 1px solid rgba(30, 91, 138, 0.25);
-}
+/* ── Status badges ─────────────────────────────────────────────── */
 
 [data-placeholder] {
   position: relative;
